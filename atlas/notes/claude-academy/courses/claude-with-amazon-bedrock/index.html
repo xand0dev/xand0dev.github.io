@@ -1,0 +1,591 @@
+<!DOCTYPE html><html lang="uk" data-astro-cid-hkbrpulz><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#000000"><title>Claude with Amazon Bedrock</title><meta name="description" content="Oleksandr Riasnyi — full-stack engineer and product builder. Builds with human–agent teams."><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23000'/%3E%3Cpath d='M16 5l10 6v10l-10 6-10-6V11z' fill='none' stroke='%239A9FA7' stroke-width='1.6'/%3E%3Cpath d='M16 13l4 2.3v4.4L16 22l-4-2.3v-4.4z' fill='%23FF2A2A'/%3E%3C/svg%3E"><link rel="stylesheet" href="/_astro/Base.QeIhvAII.css"><link rel="stylesheet" href="/_astro/_..URIy-ZYX.css"><style>.atlas-nav[data-astro-cid-7leze3h6]{z-index:5;padding:0 var(--gutter);position:relative}.atlas-nav[data-astro-cid-7leze3h6].overlay{position:absolute;top:80px;left:0;right:0}.in[data-astro-cid-7leze3h6]{max-width:var(--max);scrollbar-width:none;align-items:center;gap:12px;margin:0 auto;padding:14px 0;display:flex;overflow-x:auto}.in[data-astro-cid-7leze3h6]::-webkit-scrollbar{display:none}.root[data-astro-cid-7leze3h6]{font-family:var(--f-display);letter-spacing:-.04em;color:var(--red);font-size:.95rem;font-weight:800;font-stretch:112%;text-decoration:none}.sep[data-astro-cid-7leze3h6]{color:var(--text-3);font-family:var(--f-code)}.tabs[data-astro-cid-7leze3h6]{gap:4px;display:flex}.tabs[data-astro-cid-7leze3h6] a[data-astro-cid-7leze3h6]{white-space:nowrap;font-family:var(--f-code);color:var(--text-2);border:1px solid #0000;border-radius:9px;align-items:baseline;gap:8px;padding:8px 12px;font-size:.74rem;font-stretch:88%;text-decoration:none;transition:color .2s,border-color .2s,background .2s;display:inline-flex}.tabs[data-astro-cid-7leze3h6] a[data-astro-cid-7leze3h6]:hover{color:var(--text);border-color:var(--edge-2);background:#0a0a0cb3}.n[data-astro-cid-7leze3h6]{color:var(--text-3);font-size:.62rem}.tabs[data-astro-cid-7leze3h6] a[data-astro-cid-7leze3h6][aria-current=page]{color:#fff;border-color:var(--red);box-shadow:0 0 24px -8px var(--red-glow);background:#78000059}.tabs[data-astro-cid-7leze3h6] a[data-astro-cid-7leze3h6][aria-current=page] .n[data-astro-cid-7leze3h6]{color:#ffb3b3}
+</style></head><body data-astro-cid-hkbrpulz><header class="top" data-astro-cid-hkbrpulz><div class="top-in" data-astro-cid-hkbrpulz><a href="/" class="mark" aria-label="Home" data-astro-cid-hkbrpulz><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" data-astro-cid-hkbrpulz><path d="M16 3l11 6.5v13L16 29 5 22.5v-13z" fill="none" stroke="#3a3d42" stroke-width="1.4" data-astro-cid-hkbrpulz></path><path d="M16 3v13M5 9.5L16 16l11-6.5" fill="none" stroke="#2a2c31" stroke-width="1.2" data-astro-cid-hkbrpulz></path><path class="core" d="M16 12.5l4 2.3v4.6L16 21.7l-4-2.3v-4.6z" data-astro-cid-hkbrpulz></path></svg><span class="name" data-astro-cid-hkbrpulz>xand0dev</span></a><nav aria-label="Main" data-astro-cid-hkbrpulz><a href="/#work" data-astro-cid-hkbrpulz>Work</a><a href="/atlas" aria-current="page" data-astro-cid-hkbrpulz>Atlas</a><a href="/certificates" data-astro-cid-hkbrpulz>Certs</a><a class="hire" href="mailto:oleksandr.riasnyi.dev@gmail.com" data-astro-cid-hkbrpulz>Contact</a></nav></div></header><main class="m" data-astro-cid-hkbrpulz><div class="progress" aria-hidden="true" data-astro-cid-iyxugrip><i id="read-bar" data-astro-cid-iyxugrip></i></div><nav class="atlas-nav" aria-label="Atlas" data-astro-cid-7leze3h6><div class="in" data-astro-cid-7leze3h6><a class="root" href="/atlas" data-astro-cid-7leze3h6>Atlas</a><span class="sep" aria-hidden="true" data-astro-cid-7leze3h6>/</span><div class="tabs" data-astro-cid-7leze3h6><a href="/atlas" data-astro-cid-7leze3h6><span class="l" data-astro-cid-7leze3h6>Галактика</span><span class="n" data-astro-cid-7leze3h6>316</span></a><a href="/atlas/sdd" data-astro-cid-7leze3h6><span class="l" data-astro-cid-7leze3h6>SDD-конвеєр</span><span class="n" data-astro-cid-7leze3h6>6</span></a><a href="/atlas/team" data-astro-cid-7leze3h6><span class="l" data-astro-cid-7leze3h6>Human–agent team</span><span class="n" data-astro-cid-7leze3h6>7</span></a><a href="/atlas/patterns" data-astro-cid-7leze3h6><span class="l" data-astro-cid-7leze3h6>Патерни</span><span class="n" data-astro-cid-7leze3h6>6</span></a><a href="/atlas#notes" aria-current="page" data-astro-cid-7leze3h6><span class="l" data-astro-cid-7leze3h6>Конспекти</span><span class="n" data-astro-cid-7leze3h6>58</span></a></div></div></nav><div class="wrap layout" data-astro-cid-iyxugrip><aside class="toc" data-astro-cid-iyxugrip><p class="crumb" data-astro-cid-iyxugrip><a href="/atlas#notes" data-astro-cid-iyxugrip>Конспекти</a> / claude-academy / courses</p><nav aria-label="Зміст" data-astro-cid-iyxugrip><ul data-astro-cid-iyxugrip><li class="d2" data-astro-cid-iyxugrip><a href="#course-introduction" data-astro-cid-iyxugrip>Course introduction</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#1-overview-of-claude-models" data-astro-cid-iyxugrip>1. Overview of Claude Models</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#working-with-the-api" data-astro-cid-iyxugrip>Working with the API</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#2-accessing-the-api" data-astro-cid-iyxugrip>2. Accessing the API</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#3-making-a-request" data-astro-cid-iyxugrip>3. Making a request</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#4-multi-turn-conversations" data-astro-cid-iyxugrip>4. Multi-Turn conversations</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#5-system-prompts" data-astro-cid-iyxugrip>5. System prompts</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#6-temperature" data-astro-cid-iyxugrip>6. Temperature</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#7-streaming" data-astro-cid-iyxugrip>7. Streaming</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#8-controlling-model-output" data-astro-cid-iyxugrip>8. Controlling model output</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#9-structured-data" data-astro-cid-iyxugrip>9. Structured data</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#prompt-evaluations" data-astro-cid-iyxugrip>Prompt evaluations</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#10-prompt-evaluation" data-astro-cid-iyxugrip>10. Prompt evaluation</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#11-a-typical-eval-workflow" data-astro-cid-iyxugrip>11. A typical eval workflow</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#12-generating-test-datasets" data-astro-cid-iyxugrip>12. Generating test datasets</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#13-running-the-eval" data-astro-cid-iyxugrip>13. Running the eval</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#14-model-based-grading" data-astro-cid-iyxugrip>14. Model based grading</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#15-code-based-grading" data-astro-cid-iyxugrip>15. Code based grading</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#prompt-engineering" data-astro-cid-iyxugrip>Prompt engineering</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#16-prompt-engineering" data-astro-cid-iyxugrip>16. Prompt engineering</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#17-being-clear-and-direct" data-astro-cid-iyxugrip>17. Being clear and direct</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#18-being-specific" data-astro-cid-iyxugrip>18. Being specific</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#19-structure-with-xml-tags" data-astro-cid-iyxugrip>19. Structure with XML tags</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#20-providing-examples" data-astro-cid-iyxugrip>20. Providing examples</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#tool-use" data-astro-cid-iyxugrip>Tool use</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#21-introducing-tool-use" data-astro-cid-iyxugrip>21. Introducing tool use</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#22-tool-functions" data-astro-cid-iyxugrip>22. Tool functions</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#23-json-schema-for-tools" data-astro-cid-iyxugrip>23. JSON Schema for tools</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#24-handling-tool-use-responses" data-astro-cid-iyxugrip>24. Handling tool use responses</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#25-running-tool-functions" data-astro-cid-iyxugrip>25. Running tool functions</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#26-sending-tool-results" data-astro-cid-iyxugrip>26. Sending tool results</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#27-multi-turn-conversations-with-tools" data-astro-cid-iyxugrip>27. Multi-Turn conversations with tools</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#28-adding-multiple-tools" data-astro-cid-iyxugrip>28. Adding multiple tools</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#29-batch-tool-use" data-astro-cid-iyxugrip>29. Batch tool use</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#30-structured-data-with-tools" data-astro-cid-iyxugrip>30. Structured data with tools</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#31-flexible-tool-extraction" data-astro-cid-iyxugrip>31. Flexible tool extraction</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#32-the-text-editor-tool" data-astro-cid-iyxugrip>32. The text editor tool</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#retrieval-augmented-generation" data-astro-cid-iyxugrip>Retrieval Augmented Generation</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#33-introducing-retrieval-augmented-generation" data-astro-cid-iyxugrip>33. Introducing Retrieval Augmented Generation</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#34-text-chunking-strategies" data-astro-cid-iyxugrip>34. Text chunking strategies</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#35-text-embeddings" data-astro-cid-iyxugrip>35. Text embeddings</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#36-the-full-rag-flow" data-astro-cid-iyxugrip>36. The full RAG flow</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#37-implementing-the-rag-flow" data-astro-cid-iyxugrip>37. Implementing the RAG flow</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#38-bm25-lexical-search" data-astro-cid-iyxugrip>38. BM25 lexical search</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#39-a-multi-search-rag-pipeline" data-astro-cid-iyxugrip>39. A multi-search RAG pipeline</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#40-reranking-results" data-astro-cid-iyxugrip>40. Reranking results</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#41-contextual-retrieval" data-astro-cid-iyxugrip>41. Contextual retrieval</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#features-of-claude" data-astro-cid-iyxugrip>Features of Claude</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#42-extended-thinking" data-astro-cid-iyxugrip>42. Extended thinking</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#43-image-support" data-astro-cid-iyxugrip>43. Image support</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#44-pdf-support" data-astro-cid-iyxugrip>44. PDF support</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#45-citations" data-astro-cid-iyxugrip>45. Citations</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#46-prompt-caching" data-astro-cid-iyxugrip>46. Prompt caching</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#47-rules-of-prompt-caching" data-astro-cid-iyxugrip>47. Rules of prompt caching</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#model-context-protocol" data-astro-cid-iyxugrip>Model Context Protocol</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#48-introducing-mcp" data-astro-cid-iyxugrip>48. Introducing MCP</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#49-mcp-clients" data-astro-cid-iyxugrip>49. MCP clients</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#50-project-setup" data-astro-cid-iyxugrip>50. Project setup</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#51-defining-tools-with-mcp" data-astro-cid-iyxugrip>51. Defining tools with MCP</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#52-the-server-inspector" data-astro-cid-iyxugrip>52. The server inspector</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#53-implementing-a-client" data-astro-cid-iyxugrip>53. Implementing a client</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#54-defining-resources" data-astro-cid-iyxugrip>54. Defining resources</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#55-accessing-resources" data-astro-cid-iyxugrip>55. Accessing resources</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#56-defining-prompts" data-astro-cid-iyxugrip>56. Defining prompts</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#57-prompts-in-the-client" data-astro-cid-iyxugrip>57. Prompts in the client</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#58-mcp-review" data-astro-cid-iyxugrip>58. MCP review</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#agents" data-astro-cid-iyxugrip>Agents</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#59-claude-code-in-action" data-astro-cid-iyxugrip>59. Claude Code in action</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#60-adding-mcp-servers-to-claude-code" data-astro-cid-iyxugrip>60. Adding MCP servers to Claude Code</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#61-parallelizing-claude-code" data-astro-cid-iyxugrip>61. Parallelizing Claude Code</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#62-automated-debugging" data-astro-cid-iyxugrip>62. Automated debugging</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#63-computer-use" data-astro-cid-iyxugrip>63. Computer Use</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#64-how-computer-use-works" data-astro-cid-iyxugrip>64. How Computer Use works</a></li><li class="d3" data-astro-cid-iyxugrip><a href="#65-qualities-of-agents" data-astro-cid-iyxugrip>65. Qualities of agents</a></li><li class="d2" data-astro-cid-iyxugrip><a href="#final-assessment" data-astro-cid-iyxugrip>Final assessment</a></li></ul></nav></aside><article class="prose" data-astro-cid-iyxugrip><h1 id="claude-with-amazon-bedrock">Claude with Amazon Bedrock</h1>
+<p>65 уроків · 480 хв за каталогом · 8 офіційних quizzes · бейдж доступний
+Версія 1.0.0 · перевірено 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock">Сторінка курсу</a></p>
+<p>Позначки «Anthropic» переказують відкритий матеріал. «Застосування» та «Перевірка» є власними інженерними рекомендаціями.</p>
+<h2 id="course-introduction">Course introduction</h2>
+<p><a id="lesson-01"></a></p>
+<h3 id="1-overview-of-claude-models">1. Overview of Claude Models</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/overview-of-claude-models">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Моделі Claude відрізняються можливостями і вартістю, а Bedrock надає доступ через AWS.</li>
+<li><strong>Застосування</strong> · Порівняй доступні в регіоні моделі за тестовим набором та профілем AWS.</li>
+<li><strong>Перевірка</strong> · Перевір реальний доступ обраної account role.</li>
+</ul>
+<h2 id="working-with-the-api">Working with the API</h2>
+<p><a id="lesson-02"></a></p>
+<h3 id="2-accessing-the-api">2. Accessing the API</h3>
+<p>1 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/accessing-the-api">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Bedrock інтегрує виклики моделей з AWS identity і конфігурацією регіону.</li>
+<li><strong>Застосування</strong> · Зроби окремий Bedrock provider smoke test зі scoped IAM.</li>
+<li><strong>Перевірка</strong> · Конфігурація API відрізняється від прямого виклику Anthropic.</li>
+</ul>
+<p><a id="lesson-03"></a></p>
+<h3 id="3-making-a-request">3. Making a request</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/making-a-request">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-03">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Messages request задає модель, повідомлення та параметри виходу.</li>
+<li><strong>Застосування</strong> · Збережи request ID, usage і статус для одного тестового запиту.</li>
+<li><strong>Перевірка</strong> · Обробляй rate limits і API errors явно.</li>
+</ul>
+<p><a id="lesson-04"></a></p>
+<h3 id="4-multi-turn-conversations">4. Multi-Turn conversations</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/multi-turn-conversations">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-04">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Наступні запити можуть включати попередні повідомлення діалогу.</li>
+<li><strong>Застосування</strong> · Зберігай послідовність ролей, refs і компактний checkpoint.</li>
+<li><strong>Перевірка</strong> · Зростання історії впливає на токени й затримку.</li>
+</ul>
+<p><a id="lesson-05"></a></p>
+<h3 id="5-system-prompts">5. System prompts</h3>
+<p>8 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/system-prompts">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-05">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · System prompt задає загальну поведінку моделі в запиті.</li>
+<li><strong>Застосування</strong> · Версіонуй transfer contract і мову відповіді.</li>
+<li><strong>Перевірка</strong> · Права та валідація живуть за межами prompt.</li>
+</ul>
+<p><a id="lesson-06"></a></p>
+<h3 id="6-temperature">6. Temperature</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/temperature">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-06">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Temperature змінює властивості вибірки, коли підтримується моделлю.</li>
+<li><strong>Застосування</strong> · Для benchmark фіксуй підтримувані settings у trace.</li>
+<li><strong>Перевірка</strong> · Не припускай, що одні параметри працюють на всіх моделях.</li>
+</ul>
+<p><a id="lesson-07"></a></p>
+<h3 id="7-streaming">7. Streaming</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/streaming">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-07">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Streaming передає частини відповіді під час генерації.</li>
+<li><strong>Застосування</strong> · Споживай дельти для UI, фінальний артефакт валідуй після завершення.</li>
+<li><strong>Перевірка</strong> · Перерваний стрім лишає неповний output.</li>
+</ul>
+<p><a id="lesson-08"></a></p>
+<h3 id="8-controlling-model-output">8. Controlling model output</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/controlling-model-output">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Урок демонструє контроль виходу в конкретній версії курсу і зазначає обмеження prefilled assistant messages на новіших моделях.</li>
+<li><strong>Застосування</strong> · Вибирай підтримувані structured outputs і тестуй API contract.</li>
+<li><strong>Перевірка</strong> · Не перенось приклад між моделями без перевірки.</li>
+</ul>
+<p><a id="lesson-09"></a></p>
+<h3 id="9-structured-data">9. Structured data</h3>
+<p>15 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/structured-data">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-08">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Структурований вихід потрібен для програмного споживання.</li>
+<li><strong>Застосування</strong> · Опиши JSON schema для verdict, evidence і blockers.</li>
+<li><strong>Перевірка</strong> · Схема не перевіряє точність evidence.</li>
+</ul>
+<h2 id="prompt-evaluations">Prompt evaluations</h2>
+<p><a id="lesson-10"></a></p>
+<h3 id="10-prompt-evaluation">10. Prompt evaluation</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/prompt-evaluation">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-09">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Prompt eval вимірює поведінку за визначеними випадками й критеріями.</li>
+<li><strong>Застосування</strong> · Створи baseline для classifier дозволених дій.</li>
+<li><strong>Перевірка</strong> · Запиши версії моделі, prompt і fixtures.</li>
+</ul>
+<p><a id="lesson-11"></a></p>
+<h3 id="11-a-typical-eval-workflow">11. A typical eval workflow</h3>
+<p>8 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/a-typical-eval-workflow">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-10">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Workflow eval включає вибір cases, генерацію, оцінку та покращення.</li>
+<li><strong>Застосування</strong> · Збирай failure reason і повторюй однакові випадки після зміни.</li>
+<li><strong>Перевірка</strong> · Тримай незалежну контрольну вибірку.</li>
+</ul>
+<p><a id="lesson-12"></a></p>
+<h3 id="12-generating-test-datasets">12. Generating test datasets</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/generating-test-datasets">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-11">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Dataset представляє сценарії та очікуваний вихід для перевірки.</li>
+<li><strong>Застосування</strong> · Додай positives, hard negatives і production-inspired fixtures.</li>
+<li><strong>Перевірка</strong> · Синтетичні приклади треба звіряти з реальними.</li>
+</ul>
+<p><a id="lesson-13"></a></p>
+<h3 id="13-running-the-eval">13. Running the eval</h3>
+<p>15 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/running-the-eval">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-12">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Eval runner пов’язує запуск, вихід і оцінку на кожному кейсі.</li>
+<li><strong>Застосування</strong> · Зберігай run metadata та статус timeout окремо від неправильного результату.</li>
+<li><strong>Перевірка</strong> · Уповільнення не повинно непомітно видаляти кейси.</li>
+</ul>
+<p><a id="lesson-14"></a></p>
+<h3 id="14-model-based-grading">14. Model based grading</h3>
+<p>15 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/model-based-grading">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-13">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Model grader корисний для неоднозначних критеріїв з рубрикою.</li>
+<li><strong>Застосування</strong> · Оціни повноту обґрунтування за критеріями і зразками.</li>
+<li><strong>Перевірка</strong> · Калібруй по людській вибірці й не доручай йому security gate.</li>
+</ul>
+<p><a id="lesson-15"></a></p>
+<h3 id="15-code-based-grading">15. Code based grading</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/code-based-grading">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-14">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Code grader перевіряє точні критерії програмно.</li>
+<li><strong>Застосування</strong> · Перевір schema, ACL, SHA і стан CI.</li>
+<li><strong>Перевірка</strong> · Покриття коду grader не дорівнює покриттю якості.</li>
+</ul>
+<h2 id="prompt-engineering">Prompt engineering</h2>
+<p><a id="lesson-16"></a></p>
+<h3 id="16-prompt-engineering">16. Prompt engineering</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/prompt-engineering">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-15">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Prompt engineering ітерує інструкції за фактичними помилками.</li>
+<li><strong>Застосування</strong> · Зміни один компонент prompt і запусти regression suite.</li>
+<li><strong>Перевірка</strong> · Перевір документацію для актуальної версії моделі.</li>
+</ul>
+<p><a id="lesson-17"></a></p>
+<h3 id="17-being-clear-and-direct">17. Being clear and direct</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/being-clear-and-direct">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-16">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Чіткі прямі формулювання зменшують неоднозначність.</li>
+<li><strong>Застосування</strong> · Задай одну дію, межі й очікуваний артефакт.</li>
+<li><strong>Перевірка</strong> · Якщо намір неоднозначний, запиши блокер.</li>
+</ul>
+<p><a id="lesson-18"></a></p>
+<h3 id="18-being-specific">18. Being specific</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/being-specific">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-17">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Специфічність визначає потрібні поля, критерії і межі.</li>
+<li><strong>Застосування</strong> · Вкажи точний SHA, scope repo і формат evidence.</li>
+<li><strong>Перевірка</strong> · Не вимагай від моделі вгадати відсутні значення.</li>
+</ul>
+<p><a id="lesson-19"></a></p>
+<h3 id="19-structure-with-xml-tags">19. Structure with XML tags</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/structure-with-xml-tags">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-18">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Розмітка розділяє інструкції, дані та приклади.</li>
+<li><strong>Застосування</strong> · Виділи task brief і зовнішній документ різними секціями.</li>
+<li><strong>Перевірка</strong> · Теги не є ізоляцією або захистом від інструкцій всередині.</li>
+</ul>
+<p><a id="lesson-20"></a></p>
+<h3 id="20-providing-examples">20. Providing examples</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/providing-examples">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-19">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Приклади демонструють очікувану поведінку та формат.</li>
+<li><strong>Застосування</strong> · Додай позитивний та негативний приклад оцінки SHA.</li>
+<li><strong>Перевірка</strong> · Уникай прикладів, що випадково визначають факти майбутньої задачі.</li>
+</ul>
+<h2 id="tool-use">Tool use</h2>
+<p><a id="lesson-21"></a></p>
+<h3 id="21-introducing-tool-use">21. Introducing tool use</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/introducing-tool-use">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-20">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Tool use дозволяє моделі просити застосунок виконати оголошену дію.</li>
+<li><strong>Застосування</strong> · Перевіряти read-only інструмент через gateway.</li>
+<li><strong>Перевірка</strong> · Модельна пропозиція не є дозволом.</li>
+</ul>
+<p><a id="lesson-22"></a></p>
+<h3 id="22-tool-functions">22. Tool functions</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/tool-functions">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-22">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Tool function реалізує прикладну поведінку, окрему від модельного опису.</li>
+<li><strong>Застосування</strong> · Робити функцію з вузьким scope і типізованими помилками.</li>
+<li><strong>Перевірка</strong> · Валідуй ресурс повторно при фактичному виконанні.</li>
+</ul>
+<p><a id="lesson-23"></a></p>
+<h3 id="23-json-schema-for-tools">23. JSON Schema for tools</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/json-schema-for-tools">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-23">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · JSON Schema описує вхід tool для моделі та застосунку.</li>
+<li><strong>Застосування</strong> · Синхронізуй schema і runtime validator.</li>
+<li><strong>Перевірка</strong> · Помилка доступу не є помилкою структури.</li>
+</ul>
+<p><a id="lesson-24"></a></p>
+<h3 id="24-handling-tool-use-responses">24. Handling tool use responses</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/handling-tool-use-responses">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-24">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Повідомлення складаються з блоків різних типів, зокрема tool-use.</li>
+<li><strong>Застосування</strong> · Парси блоки за type, зберігай tool call ID.</li>
+<li><strong>Перевірка</strong> · Не приводь усі блоки до рядка.</li>
+</ul>
+<p><a id="lesson-25"></a></p>
+<h3 id="25-running-tool-functions">25. Running tool functions</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/running-tool-functions">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Застосунок запускає оголошену функцію після отримання tool-use блоку.</li>
+<li><strong>Застосування</strong> · Registry повертає status і evidence ref для виклику.</li>
+<li><strong>Перевірка</strong> · Виконання перевіряє policy перед запуском.</li>
+</ul>
+<p><a id="lesson-26"></a></p>
+<h3 id="26-sending-tool-results">26. Sending tool results</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/sending-tool-results">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-25">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Результат інструмента повертається моделі з відповідним ID.</li>
+<li><strong>Застосування</strong> · Поверни короткі дані, evidence ref і status.</li>
+<li><strong>Перевірка</strong> · Вилучи непотрібні приватні поля з model context.</li>
+</ul>
+<p><a id="lesson-27"></a></p>
+<h3 id="27-multi-turn-conversations-with-tools">27. Multi-Turn conversations with tools</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/multi-turn-conversations-with-tools">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-26">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Багатокроковий діалог передає інструментальні повідомлення у правильному порядку.</li>
+<li><strong>Застосування</strong> · Зберігай хронологію tool_use і tool_result.</li>
+<li><strong>Перевірка</strong> · Незакритий виклик потребує явної обробки.</li>
+</ul>
+<p><a id="lesson-28"></a></p>
+<h3 id="28-adding-multiple-tools">28. Adding multiple tools</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/adding-multiple-tools">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-28">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Кілька tools потребують dispatch за іменем, параметрами та ID.</li>
+<li><strong>Застосування</strong> · Веди registry з allowed roles і schemas.</li>
+<li><strong>Перевірка</strong> · Окремі дозволи для read і write.</li>
+</ul>
+<p><a id="lesson-29"></a></p>
+<h3 id="29-batch-tool-use">29. Batch tool use</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/batch-tool-use">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Batch tool use групує кілька викликів для одного прикладного завдання.</li>
+<li><strong>Застосування</strong> · Видавай окремий outcome на кожен елемент і обмежуй розмір.</li>
+<li><strong>Перевірка</strong> · Partial failure потребує окремого повтору елементів.</li>
+</ul>
+<p><a id="lesson-30"></a></p>
+<h3 id="30-structured-data-with-tools">30. Structured data with tools</h3>
+<p>8 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/structured-data-with-tools">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Tool schema може задавати очікувану структуру виходу для застосунку.</li>
+<li><strong>Застосування</strong> · Приймай об’єкт release report і перевіряй поля runtime.</li>
+<li><strong>Перевірка</strong> · Виклик extraction tool не підтверджує достовірність значень.</li>
+</ul>
+<p><a id="lesson-31"></a></p>
+<h3 id="31-flexible-tool-extraction">31. Flexible tool extraction</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/flexible-tool-extraction">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Гнучке вилучення адаптує форму результату до джерела та запиту.</li>
+<li><strong>Застосування</strong> · Видай optional fields з explicit unknown та refs.</li>
+<li><strong>Перевірка</strong> · Бракує джерела — бракує значення.</li>
+</ul>
+<p><a id="lesson-32"></a></p>
+<h3 id="32-the-text-editor-tool">32. The text editor tool</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/the-text-editor-tool">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-30">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Text editor tool має операції читання й редагування тексту.</li>
+<li><strong>Застосування</strong> · Обмежуй редагування одним worktree і записуй diff.</li>
+<li><strong>Перевірка</strong> · Провайдер та версія можуть відрізнятись, перевір документацію.</li>
+</ul>
+<h2 id="retrieval-augmented-generation">Retrieval Augmented Generation</h2>
+<p><a id="lesson-33"></a></p>
+<h3 id="33-introducing-retrieval-augmented-generation">33. Introducing Retrieval Augmented Generation</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/introducing-retrieval-augmented-generation">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-32">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · RAG добирає релевантний розділ знань для контексту перед генерацією.</li>
+<li><strong>Застосування</strong> · Шукай за tenant, доступом і версією до збирання prompt.</li>
+<li><strong>Перевірка</strong> · Низький recall проявляється як пропуски або вигадки.</li>
+</ul>
+<p><a id="lesson-34"></a></p>
+<h3 id="34-text-chunking-strategies">34. Text chunking strategies</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/text-chunking-strategies">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-33">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Chunking ділить джерела на одиниці, придатні для пошуку.</li>
+<li><strong>Застосування</strong> · Для цієї бази один урок є chunk, архітектуру ділити за heading.</li>
+<li><strong>Перевірка</strong> · Розбиття не повинно відокремити критерій від пояснення.</li>
+</ul>
+<p><a id="lesson-35"></a></p>
+<h3 id="35-text-embeddings">35. Text embeddings</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/text-embeddings">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-34">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Embeddings кодують зміст для пошуку за семантичною близькістю.</li>
+<li><strong>Застосування</strong> · Фіксуй версію embedding-моделі й перевір multilingual queries.</li>
+<li><strong>Перевірка</strong> · Вектори різних моделей не сумісні без переіндексації.</li>
+</ul>
+<p><a id="lesson-36"></a></p>
+<h3 id="36-the-full-rag-flow">36. The full RAG flow</h3>
+<p>4 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/the-full-rag-flow">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-35">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Потік RAG охоплює індексацію, retrieval, context assembly і генерацію.</li>
+<li><strong>Застосування</strong> · Записуй знайдені IDs, версії, ranks і фінальні citations.</li>
+<li><strong>Перевірка</strong> · Розділяй помилки retrieval і generation.</li>
+</ul>
+<p><a id="lesson-37"></a></p>
+<h3 id="37-implementing-the-rag-flow">37. Implementing the RAG flow</h3>
+<p>15 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/implementing-the-rag-flow">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-36">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Реалізація RAG пов’язує chunk, embedding, запит і контекст відповіді.</li>
+<li><strong>Застосування</strong> · Зроби наскрізний fixture з очевидно релевантним джерелом.</li>
+<li><strong>Перевірка</strong> · Перевір, що відповідь не містить недоступних chunk.</li>
+</ul>
+<p><a id="lesson-38"></a></p>
+<h3 id="38-bm25-lexical-search">38. BM25 lexical search</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/bm25-lexical-search">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-37">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · BM25 шукає за термами і добре працює для точних назв та кодів.</li>
+<li><strong>Застосування</strong> · Індексуй MCP identifiers, SHA prefixes і назви файлів.</li>
+<li><strong>Перевірка</strong> · Синоніми й українські відмінки можуть потребувати семантичного пошуку.</li>
+</ul>
+<p><a id="lesson-39"></a></p>
+<h3 id="39-a-multi-search-rag-pipeline">39. A multi-search RAG pipeline</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/a-multi-search-rag-pipeline">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-38">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Гібридний пошук комбінує кандидати з різних індексів.</li>
+<li><strong>Застосування</strong> · Об’єднай ранги, дедуплікуй canonical IDs і rerank top candidates.</li>
+<li><strong>Перевірка</strong> · Без дедуплікації API-курси можуть зайняти весь top-k.</li>
+</ul>
+<p><a id="lesson-40"></a></p>
+<h3 id="40-reranking-results">40. Reranking results</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/reranking-results">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Reranking переоцінює первинних кандидатів відносно точного query.</li>
+<li><strong>Застосування</strong> · Використай reranker на top 20 і порівняй recall та latency.</li>
+<li><strong>Перевірка</strong> · ACL виконується до rerank.</li>
+</ul>
+<p><a id="lesson-41"></a></p>
+<h3 id="41-contextual-retrieval">41. Contextual retrieval</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/contextual-retrieval">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Contextual retrieval додає до фрагмента контекст документа, покращуючи пошук окремих частин.</li>
+<li><strong>Застосування</strong> · Додай ідентифікатор курсу, модуль та тему як retrieval context.</li>
+<li><strong>Перевірка</strong> · Не індексуй вигаданий префікс як перевірний факт.</li>
+</ul>
+<h2 id="features-of-claude">Features of Claude</h2>
+<p><a id="lesson-42"></a></p>
+<h3 id="42-extended-thinking">42. Extended thinking</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/extended-thinking">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-39">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Extended thinking або відповідний режим моделі дає додаткову роботу над складним запитом.</li>
+<li><strong>Застосування</strong> · Дай окремий бюджет лише складним задачам, де є виграш на eval.</li>
+<li><strong>Перевірка</strong> · Параметри залежать від версії моделі.</li>
+</ul>
+<p><a id="lesson-43"></a></p>
+<h3 id="43-image-support">43. Image support</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/image-support">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-40">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Vision приймає підтримувані зображення як вхідні блоки.</li>
+<li><strong>Застосування</strong> · Подай дозволений скриншот і звір критичний текст з DOM або людиною.</li>
+<li><strong>Перевірка</strong> · Нечіткі цифри і дрібні символи можуть бути прочитані невірно.</li>
+</ul>
+<p><a id="lesson-44"></a></p>
+<h3 id="44-pdf-support">44. PDF support</h3>
+<p>6 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/pdf-support">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-41">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · PDF може слугувати джерелом тексту й візуального контексту.</li>
+<li><strong>Застосування</strong> · Зберігай документ, digest та номери сторінок для claims.</li>
+<li><strong>Перевірка</strong> · OCR і порядок колонок потребують перевірки.</li>
+</ul>
+<p><a id="lesson-45"></a></p>
+<h3 id="45-citations">45. Citations</h3>
+<p>4 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/citations">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-42">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Citations прикріплюють висновки до опорних фрагментів.</li>
+<li><strong>Застосування</strong> · Валідуй доступність джерела й точне відношення до claim.</li>
+<li><strong>Перевірка</strong> · Цитата без підтримки твердження не проходить review.</li>
+</ul>
+<p><a id="lesson-46"></a></p>
+<h3 id="46-prompt-caching">46. Prompt caching</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/prompt-caching">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-43">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Prompt caching повторно використовує стабільний префікс підтримуваних запитів.</li>
+<li><strong>Застосування</strong> · Кешуй інструкції й реєстр tools, окремо додавай змінні дані.</li>
+<li><strong>Перевірка</strong> · Вимірюй cache read, write і реальну економію.</li>
+</ul>
+<p><a id="lesson-47"></a></p>
+<h3 id="47-rules-of-prompt-caching">47. Rules of prompt caching</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/rules-of-prompt-caching">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-44">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Ефект кешу залежить від правил сумісності, меж і стабільності префікса.</li>
+<li><strong>Застосування</strong> · Фіксуй версії policy і стабільний порядок інструментів.</li>
+<li><strong>Перевірка</strong> · Оновлена політика потребує нового префікса.</li>
+</ul>
+<h2 id="model-context-protocol">Model Context Protocol</h2>
+<p><a id="lesson-48"></a></p>
+<h3 id="48-introducing-mcp">48. Introducing MCP</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/introducing-mcp">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-01">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Курс вводить MCP як протокол підключення AI-застосунку до інструментів і контексту.</li>
+<li><strong>Застосування</strong> · Підключи один read-only connector до задач FITGYM. Модель отримує схему і відібрані результати.</li>
+<li><strong>Перевірка</strong> · Захист доступу реалізуй у сервері та gateway. Протокол не створює права доступу.</li>
+</ul>
+<p><a id="lesson-49"></a></p>
+<h3 id="49-mcp-clients">49. MCP clients</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/mcp-clients">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-02">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Клієнт узгоджує можливості сервера та обмінюється повідомленнями незалежно від прикладної задачі.</li>
+<li><strong>Застосування</strong> · Виділи адаптер для discovery та виклику. Запиши версію протоколу і доступні capabilities.</li>
+<li><strong>Перевірка</strong> · Оброби сервер, який не підтримує потрібну можливість, без спроби виклику.</li>
+</ul>
+<p><a id="lesson-50"></a></p>
+<h3 id="50-project-setup">50. Project setup</h3>
+<p>1 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/project-setup">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-49">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Підготовка MCP проєкту задає клієнт, сервер і локальний запуск.</li>
+<li><strong>Застосування</strong> · Фіксуй залежності, smoke command та незалежний fixture.</li>
+<li><strong>Перевірка</strong> · Дозволи реального workspace не переносяться з прикладу.</li>
+</ul>
+<p><a id="lesson-51"></a></p>
+<h3 id="51-defining-tools-with-mcp">51. Defining tools with MCP</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/defining-tools-with-mcp">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-03">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Схема MCP tool описує аргументи функції, яку може викликати застосунок.</li>
+<li><strong>Застосування</strong> · Експонуй read_issue та окремий propose_update. Перевір tenant, scope і типи на сервері.</li>
+<li><strong>Перевірка</strong> · Збіг зі схемою не підтверджує прав на конкретний issue.</li>
+</ul>
+<p><a id="lesson-52"></a></p>
+<h3 id="52-the-server-inspector">52. The server inspector</h3>
+<p>4 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/the-server-inspector">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-04">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Inspector допомагає вручну перевірити discovery, аргументи й результати сервера.</li>
+<li><strong>Застосування</strong> · Збери smoke-набір для успіху, неправильного аргументу, відмови доступу та timeout.</li>
+<li><strong>Перевірка</strong> · Випробуй маршрут через реальний клієнт також. Успішний Inspector не покриває інтеграцію.</li>
+</ul>
+<p><a id="lesson-53"></a></p>
+<h3 id="53-implementing-a-client">53. Implementing a client</h3>
+<p>10 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/implementing-a-client">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-05">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · MCP-клієнт відкриває сесію, перелічує інструменти та передає виклики.</li>
+<li><strong>Застосування</strong> · Підставляй короткоживучу ідентичність запуску. Поверни tool result з ідентифікатором запиту.</li>
+<li><strong>Перевірка</strong> · Завершуй процес і звільняй сесію при скасуванні.</li>
+</ul>
+<p><a id="lesson-54"></a></p>
+<h3 id="54-defining-resources">54. Defining resources</h3>
+<p>4 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/defining-resources">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-06">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Resources представляють дані за URI, включно з шаблонами.</li>
+<li><strong>Застосування</strong> · Видавай дозволені записи як project://issues/{id}, з ACL перевіркою при кожному читанні.</li>
+<li><strong>Перевірка</strong> · Відомий URI не означає авторизацію. Тестуй cross-tenant запит.</li>
+</ul>
+<p><a id="lesson-55"></a></p>
+<h3 id="55-accessing-resources">55. Accessing resources</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/accessing-resources">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-07">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Клієнт читає resource й інтерпретує результат за типом контенту.</li>
+<li><strong>Застосування</strong> · Додай обмеження розміру, підтримувані MIME і збереження версії артефакту.</li>
+<li><strong>Перевірка</strong> · Інструкції всередині ресурсу залишаються зовнішніми даними. Політика виклику їх не наслідує.</li>
+</ul>
+<p><a id="lesson-56"></a></p>
+<h3 id="56-defining-prompts">56. Defining prompts</h3>
+<p>9 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/defining-prompts">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-08">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · MCP prompt пакує повторюваний шаблон взаємодії із параметрами.</li>
+<li><strong>Застосування</strong> · Дай користувачу шаблон підготовки звіту з project ID як явним параметром.</li>
+<li><strong>Перевірка</strong> · Застосуй ACL навіть якщо prompt вже містить URI.</li>
+</ul>
+<p><a id="lesson-57"></a></p>
+<h3 id="57-prompts-in-the-client">57. Prompts in the client</h3>
+<p>7 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/prompts-in-the-client">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-09">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Клієнт може перелічити prompts і отримати обраний шаблон з аргументами.</li>
+<li><strong>Застосування</strong> · Покажи людині версію шаблону й межі дій перед запуском.</li>
+<li><strong>Перевірка</strong> · Зміна шаблону не розширює доступ агента. Перевір політику незалежно.</li>
+</ul>
+<p><a id="lesson-58"></a></p>
+<h3 id="58-mcp-review">58. MCP review</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/mcp-review">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/introduction-to-model-context-protocol#lesson-10">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Підсумок курсу розділяє модельні tools, керовані застосунком resources та prompts, ініційовані користувачем.</li>
+<li><strong>Застосування</strong> · Для релізу: tool перевіряє стан, resource дає артефакт, prompt починає звіт.</li>
+<li><strong>Перевірка</strong> · Згодне з протоколом розділення не замінює серверне enforcement.</li>
+</ul>
+<h2 id="agents">Agents</h2>
+<p><a id="lesson-59"></a></p>
+<h3 id="59-claude-code-in-action">59. Claude Code in action</h3>
+<p>2 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/claude-code-in-action">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-59">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · Claude Code може дослідити репо, змінити код і запустити перевірки.</li>
+<li><strong>Застосування</strong> · Створюй окремий worktree і додавай до звіту test output.</li>
+<li><strong>Перевірка</strong> · Review diff потрібний перед інтеграцією.</li>
+</ul>
+<p><a id="lesson-60"></a></p>
+<h3 id="60-adding-mcp-servers-to-claude-code">60. Adding MCP servers to Claude Code</h3>
+<p>5 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/enhancements-with-mcp-servers">Першоджерело</a>
+Тематичний збіг із <a href="/atlas/notes/claude-academy/courses/building-with-the-claude-api#lesson-60">канонічним конспектом</a>. Приклади й конфігурацію SDK для AWS Bedrock перевіряй у першоджерелі цього уроку.</p>
+<ul>
+<li><strong>Anthropic</strong> · MCP server розширює Claude Code інструментами й джерелами.</li>
+<li><strong>Застосування</strong> · Почни з read-only сервера і config scope для тестового проєкту.</li>
+<li><strong>Перевірка</strong> · Локальна конфігурація не має вмикати production access.</li>
+</ul>
+<p><a id="lesson-61"></a></p>
+<h3 id="61-parallelizing-claude-code">61. Parallelizing Claude Code</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/parallelizing-claude-code">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Паралельна робота в Claude Code корисна для окремих областей.</li>
+<li><strong>Застосування</strong> · Дай різні worktrees і узгоджений integration plan.</li>
+<li><strong>Перевірка</strong> · Зміни спільного API перевіряються разом.</li>
+</ul>
+<p><a id="lesson-62"></a></p>
+<h3 id="62-automated-debugging">62. Automated debugging</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/automated-debugging">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Автоматизований debugging використовує реальні повідомлення про помилки й тести.</li>
+<li><strong>Застосування</strong> · Відтворюй збій з існуючим тестом, обмежуй цикл однією гіпотезою за ітерацію.</li>
+<li><strong>Перевірка</strong> · Відмінності середовищ можуть змінити результат.</li>
+</ul>
+<p><a id="lesson-63"></a></p>
+<h3 id="63-computer-use">63. Computer Use</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/computer-use">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Computer use дає моделі дії з GUI через виконавця.</li>
+<li><strong>Застосування</strong> · Пілотуй read-only огляд дозволеної поверхні.</li>
+<li><strong>Перевірка</strong> · Перевір стан після переходу й вимоги до людського схвалення.</li>
+</ul>
+<p><a id="lesson-64"></a></p>
+<h3 id="64-how-computer-use-works">64. How Computer Use works</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/how-computer-use-works">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Виконавець перетворює запропоновану дію на UI подію і повертає спостереження.</li>
+<li><strong>Застосування</strong> · Зберігай видимий state ref до й після дії.</li>
+<li><strong>Перевірка</strong> · Координати залежать від viewport і стану програми.</li>
+</ul>
+<p><a id="lesson-65"></a></p>
+<h3 id="65-qualities-of-agents">65. Qualities of agents</h3>
+<p>3 хв · 2026-11-22 · <a href="https://academy.claude.com/courses/claude-with-amazon-bedrock/qualities-of-agents">Першоджерело</a></p>
+<ul>
+<li><strong>Anthropic</strong> · Агент поєднує дії, спостереження і вибір наступного кроку.</li>
+<li><strong>Застосування</strong> · Проєктуй stop conditions і докази завершення.</li>
+<li><strong>Перевірка</strong> · Не підміняй звірку результату останньою реплікою моделі.</li>
+</ul>
+<h2 id="final-assessment">Final assessment</h2><p class="src muted" data-astro-cid-iyxugrip>Файл: <code data-astro-cid-iyxugrip>knowledge/Claude-Academy/courses/claude-with-amazon-bedrock.md</code></p></article></div></main><footer class="foot" data-astro-cid-hkbrpulz><div class="wrap" data-astro-cid-hkbrpulz><p class="big" data-astro-cid-hkbrpulz>Got a building<br data-astro-cid-hkbrpulz>for the colony?</p><div class="mail" data-astro-cid-hkbrpulz><a href="mailto:oleksandr.riasnyi.dev@gmail.com" class="addr" data-astro-cid-hkbrpulz>oleksandr.riasnyi.dev@gmail.com</a><button type="button" class="copy" id="copy-mail" data-astro-cid-hkbrpulz>Copy</button></div><p class="note" data-astro-cid-hkbrpulz>Open to full-stack and backend roles, and to projects where agents do real work. I answer in English, Ukrainian or Russian.</p><div class="btns" data-astro-cid-hkbrpulz><a class="btn" href="https://www.linkedin.com/in/oleksandr-riasnyi/" data-astro-cid-hkbrpulz>LinkedIn</a><a class="btn" href="https://github.com/xand0dev" data-astro-cid-hkbrpulz>GitHub</a><a class="btn" href="https://t.me/xand_dev" data-astro-cid-hkbrpulz>Telegram</a></div><p class="sig" data-astro-cid-hkbrpulz><span data-astro-cid-hkbrpulz>Think deeply. Build simply.</span><span data-astro-cid-hkbrpulz>Kyiv. Built with Astro and Three.js, agents in the loop, me on the merge button.</span></p></div></footer><script>
+      document.getElementById('copy-mail')?.addEventListener('click', (e) => {
+        const b = e.currentTarget;
+        navigator.clipboard?.writeText('oleksandr.riasnyi.dev@gmail.com').then(() => { b.textContent = 'Copied'; setTimeout(() => (b.textContent = 'Copy'), 1600); });
+      });
+    </script></body></html><script type="module">var e=document.getElementById(`read-bar`),t=document.querySelector(`.prose`),n=()=>{let n=t.getBoundingClientRect();e.style.transform=`scaleX(${Math.min(1,Math.max(0,-n.top/(n.height-innerHeight)))})`};addEventListener(`scroll`,n,{passive:!0}),n();var r={anthropic:`src`,застосування:`apply`,перевірка:`check`};t.querySelectorAll(`li > strong:first-child`).forEach(e=>{let t=r[e.textContent.trim().toLowerCase()];if(!t)return;e.classList.add(`lead`,`lead-`+t);let n=e.nextSibling;n&&n.nodeType===3&&(n.textContent=n.textContent.replace(/^\s*·\s*/,` `))});var i=[...document.querySelectorAll(`.toc a`)],a=new IntersectionObserver(e=>e.forEach(e=>{e.isIntersecting&&i.forEach(t=>t.classList.toggle(`on`,t.hash===`#`+e.target.id))}),{rootMargin:`-20% 0px -70% 0px`});t.querySelectorAll(`h2[id], h3[id]`).forEach(e=>a.observe(e));</script>
